@@ -1,0 +1,60 @@
+﻿@model MovieCatalogMVC.Common.PagedList.PagedResult<MovieModel>
+
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Release Date
+            </th>
+            <th>
+                Genre
+            </th>
+            <th>
+                Streamings
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Results)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <th>
+                    @item.ReleaseDate.GetValueOrDefault().ToString("MM/yyyy")
+                </th>
+                <th>
+                    @Html.DisplayFor(model => item.GenreName)
+                </th>
+                <th>
+                    @string.Join(", ", item.Streamings.Select(s => s.Name))
+                </th>
+                <td>
+                    <a asp-controller="Review" asp-action="Index" asp-route-movieId="@item.MovieId">Reviews</a> |
+                    <a asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@for (var p = 1; p <= Model.PageCount; p++)
+{
+    <a href="@Url.Action("Index", new { page = p })" class="btn btn-default">@p</a>
+}

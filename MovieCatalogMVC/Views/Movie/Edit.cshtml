@@ -1,0 +1,38 @@
+﻿@model MovieModel
+
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<h2>Edit Movie</h2>
+
+<form asp-action="Edit">
+    <input asp-for="MovieId" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ReleaseDate" class="control-label">Release Date</label>
+        <input asp-for="ReleaseDate" class="form-control" type="date" />
+        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="GenreId" class="control-label">Genre</label>
+        <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
+        <span asp-validation-for="GenreId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Streamings" class="control-label">Streamings</label>
+        <select asp-for="SelectedStreamingIds" class="form-control" asp-items="ViewBag.Streamings" multiple="multiple"></select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Edit" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,34 @@
+﻿@model MovieCatalogMVC.Common.PagedList.PagedResult<ReviewModel>
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Stars</th>
+            <th>Comment</th>
+            <th>Reviewed by</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model.Results)
+        {
+            <tr>
+                <td>@review.Rate</td>
+                <td>@review.Comment</td>
+                <td>@review.UserName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@for (var p = 1; p <= Model.PageCount; p++)
+{
+    <a href="@Url.Action("Index", new { movieId = ViewBag.MovieId, page = p })" class="btn btn-default">@p</a>
+}
+
+<a asp-action="Create" asp-route-movieId="@ViewBag.MovieId" class="btn btn-primary">Add Review</a>

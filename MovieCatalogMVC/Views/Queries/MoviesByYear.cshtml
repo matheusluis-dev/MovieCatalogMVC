@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MovieCatalogMVC.Entities.Movie>
+
+@{
+    ViewData["Title"] = "Movies by Year";
+    var yearFilter = ViewBag.YearFilter as int?;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="MoviesByYear" method="get">
+    <div class="form-group">
+        <label for="yearFilter">Filter by Year:</label>
+        <input type="number" id="yearFilter" name="year" value="@yearFilter" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Release Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td><a asp-controller="Movie" asp-action="Edit" asp-route-id="@movie.MovieId" target="_blank">@movie.Title</a></td>
+                <td>@movie.Genre?.Name</td>
+                <td>@movie.ReleaseDate?.ToString("MMMM yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

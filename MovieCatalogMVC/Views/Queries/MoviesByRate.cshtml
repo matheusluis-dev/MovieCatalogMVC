@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MovieCatalogMVC.Entities.Movie>
+
+@{
+    ViewData["Title"] = "Movies by Rating";
+
+    var minAverageRating = ViewBag.MinAverageRating as string;
+    var maxAverageRating = ViewBag.MaxAverageRating as string;
+    var searchTitle = ViewBag.SearchTitle as string;
+    var searchComment = ViewBag.SearchComment as string;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="MoviesByRate" method="get">
+    <div class="form-group">
+        <label for="minAverageRating">Minimum Average Rating:</label>
+        <input type="number" value="@minAverageRating" id="minAverageRating" name="minAverageRating" step="0.1" min="0" max="5" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="maxAverageRating">Maximum Average Rating:</label>
+        <input type="number" value="@maxAverageRating" id="maxAverageRating" name="maxAverageRating" step="0.1" min="0" max="5" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="searchTitle">Search by Title:</label>
+        <input type="text" value="@searchTitle" id="searchTitle" name="searchTitle" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="searchComment">Search by Comment:</label>
+        <input type="text" value="@searchComment" id="searchComment" name="searchComment" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Genre</th>
+            <th>Average Rating</th>
+            <th>Reviews</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            var averageRating = movie.Reviews.Any() ? movie.Reviews.Average(r => r.Rate) : 0;
+
+            <tr>
+                <td><a asp-controller="Movie" asp-action="Edit" asp-route-id="@movie.MovieId" target="_blank">@movie.Title</a></td>
+                <td>@movie.ReleaseDate?.ToString("MMMM yyyy")</td>
+                <td>@movie.Genre?.Name</td>
+                <td>@averageRating.ToString("0.0")</td>
+                <td>
+                    <ul>
+                        @foreach (var review in movie.Reviews)
+                        {
+                            <li>
+                                <strong>@review.Rate</strong> - @review.Comment
+                            </li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
